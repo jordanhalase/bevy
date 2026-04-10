@@ -104,7 +104,7 @@ pub fn create_dark_theme() -> ThemeProps {
                 tokens::TEXT_INPUT_TEXT_DISABLED,
                 palette::WHITE.with_alpha(0.5),
             ),
-            (tokens::TEXT_INPUT_CURSOR, palette::ACCENT.lighter(0.1)),
+            (tokens::TEXT_INPUT_CURSOR, palette::ACCENT.lighter(0.2)),
             (tokens::TEXT_INPUT_SELECTION, palette::ACCENT),
         ]),
     }
