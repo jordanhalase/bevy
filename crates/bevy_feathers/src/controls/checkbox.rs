@@ -274,8 +274,8 @@ fn update_checkbox_styles_remove(
 ) {
     removed_disabled
         .read()
-        .chain(remove_pressed.read())
         .chain(removed_checked.read())
+        .chain(remove_pressed.read())
         .for_each(|ent| {
             if let Ok((checkbox_ent, disabled, checked, pressed, hovered, font_color)) =
                 q_checkboxes.get(ent)
@@ -329,13 +329,17 @@ fn set_checkbox_styles(
     let outline_border_token = if disabled {
         tokens::CHECKBOX_BORDER_DISABLED
     } else if checked {
-        if hovered {
+        if pressed {
+            tokens::CHECKBOX_BORDER_DISABLED // TODO
+        } else if hovered {
             tokens::CHECKBOX_BORDER_CHECKED_HOVER
         } else {
             tokens::CHECKBOX_BORDER_CHECKED
         }
     } else {
-        if hovered {
+        if pressed {
+            tokens::CHECKBOX_BORDER_DISABLED // TODO
+        } else if hovered {
             tokens::CHECKBOX_BORDER_HOVER
         } else {
             tokens::CHECKBOX_BORDER
