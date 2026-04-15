@@ -330,11 +330,22 @@ fn set_checkbox_styles(
         }
     };
 
-    let outline_bg_token = match (disabled, checked) {
-        (true, true) => tokens::CHECKBOX_BG_CHECKED_DISABLED,
-        (true, false) => tokens::CHECKBOX_BG_DISABLED,
-        (false, true) => tokens::CHECKBOX_BG_CHECKED,
-        (false, false) => tokens::CHECKBOX_BG,
+    let outline_bg_token = if checked {
+        if disabled {
+            tokens::CHECKBOX_BG_CHECKED_DISABLED
+        } else if hovered {
+            tokens::CHECKBOX_BG_CHECKED_HOVER
+        } else {
+            tokens::CHECKBOX_BG_CHECKED
+        }
+    } else {
+        if disabled {
+            tokens::CHECKBOX_BG_DISABLED
+        } else if hovered {
+            tokens::CHECKBOX_BG_HOVER
+        } else {
+            tokens::CHECKBOX_BG
+        }
     };
 
     let mark_token = match disabled {

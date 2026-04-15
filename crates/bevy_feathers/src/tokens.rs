@@ -93,11 +93,15 @@ pub const SCROLLBAR_THUMB_HOVER: ThemeToken =
 
 /// Checkbox background around the checkmark
 pub const CHECKBOX_BG: ThemeToken = ThemeToken::new_static("feathers.checkbox.bg");
+/// Checkbox background around the checkmark (hovered)
+pub const CHECKBOX_BG_HOVER: ThemeToken = ThemeToken::new_static("feathers.checkbox.bg.hover");
 /// Checkbox border around the checkmark (disabled)
 pub const CHECKBOX_BG_DISABLED: ThemeToken =
     ThemeToken::new_static("feathers.checkbox.bg.disabled");
-/// Checkbox background around the checkmark
+/// Checkbox background around the checkmark (checked)
 pub const CHECKBOX_BG_CHECKED: ThemeToken = ThemeToken::new_static("feathers.checkbox.bg.checked");
+/// Checkbox background around the checkmark (checked+hover)
+pub const CHECKBOX_BG_CHECKED_HOVER: ThemeToken = ThemeToken::new_static("feathers.checkbox.bg.checked.hover");
 /// Checkbox border around the checkmark (checked+disabled)
 pub const CHECKBOX_BG_CHECKED_DISABLED: ThemeToken =
     ThemeToken::new_static("feathers.checkbox.bg.checked.disabled");
