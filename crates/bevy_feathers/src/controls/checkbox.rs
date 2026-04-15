@@ -326,19 +326,21 @@ fn set_checkbox_styles(
     font_color: &ThemeFontColor,
     commands: &mut Commands,
 ) {
-    let outline_border_token = if disabled {
-        tokens::CHECKBOX_BORDER_DISABLED
-    } else if checked {
-        if pressed {
-            tokens::CHECKBOX_BORDER_DISABLED // TODO
+    let outline_border_token = if checked {
+        if disabled {
+            tokens::CHECKBOX_BORDER_CHECKED_DISABLED
+        } else if pressed {
+            tokens::CHECKBOX_BORDER_CHECKED_PRESSED
         } else if hovered {
             tokens::CHECKBOX_BORDER_CHECKED_HOVER
         } else {
             tokens::CHECKBOX_BORDER_CHECKED
         }
     } else {
-        if pressed {
-            tokens::CHECKBOX_BORDER_DISABLED // TODO
+        if disabled {
+            tokens::CHECKBOX_BORDER_DISABLED
+        } else if pressed {
+            tokens::CHECKBOX_BORDER_PRESSED
         } else if hovered {
             tokens::CHECKBOX_BORDER_HOVER
         } else {
@@ -349,6 +351,8 @@ fn set_checkbox_styles(
     let outline_bg_token = if checked {
         if disabled {
             tokens::CHECKBOX_BG_CHECKED_DISABLED
+        } else if pressed {
+            tokens::CHECKBOX_BG_CHECKED_PRESSED
         } else if hovered {
             tokens::CHECKBOX_BG_CHECKED_HOVER
         } else {
@@ -357,6 +361,8 @@ fn set_checkbox_styles(
     } else {
         if disabled {
             tokens::CHECKBOX_BG_DISABLED
+        } else if pressed {
+            tokens::CHECKBOX_BG_PRESSED
         } else if hovered {
             tokens::CHECKBOX_BG_HOVER
         } else {
