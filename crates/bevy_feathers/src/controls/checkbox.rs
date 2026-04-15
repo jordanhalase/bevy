@@ -21,7 +21,7 @@ use bevy_scene::prelude::*;
 use bevy_text::{FontSize, FontWeight};
 use bevy_ui::{
     AlignItems, BorderRadius, Checked, Display, FlexDirection, InteractionDisabled, JustifyContent,
-    Node, PositionType, UiRect, UiTransform, Val,
+    Node, PositionType, Pressed, UiRect, UiTransform, Val,
 };
 use bevy_ui_widgets::Checkbox;
 
@@ -201,12 +201,18 @@ fn update_checkbox_styles(
             Entity,
             Has<InteractionDisabled>,
             Has<Checked>,
+            Has<Pressed>,
             &Hovered,
             &ThemeFontColor,
         ),
         (
             With<CheckboxFrame>,
-            Or<(Changed<Hovered>, Added<Checked>, Added<InteractionDisabled>)>,
+            Or<(
+                Changed<Hovered>,
+                Added<Checked>,
+                Added<Pressed>,
+                Added<InteractionDisabled>,
+            )>,
         ),
     >,
     q_children: Query<&Children>,
@@ -214,7 +220,7 @@ fn update_checkbox_styles(
     mut q_mark: Query<&ThemeBorderColor, With<CheckboxMark>>,
     mut commands: Commands,
 ) {
-    for (checkbox_ent, disabled, checked, hovered, font_color) in q_checkboxes.iter() {
+    for (checkbox_ent, disabled, checked, pressed, hovered, font_color) in q_checkboxes.iter() {
         let Some(outline_ent) = q_children
             .iter_descendants(checkbox_ent)
             .find(|en| q_outline.contains(*en))
@@ -235,6 +241,7 @@ fn update_checkbox_styles(
             mark_ent,
             disabled,
             checked,
+            pressed,
             hovered.0,
             outline_bg,
             outline_border,
@@ -251,6 +258,7 @@ fn update_checkbox_styles_remove(
             Entity,
             Has<InteractionDisabled>,
             Has<Checked>,
+            Has<Pressed>,
             &Hovered,
             &ThemeFontColor,
         ),
@@ -261,13 +269,15 @@ fn update_checkbox_styles_remove(
     mut q_mark: Query<&ThemeBorderColor, With<CheckboxMark>>,
     mut removed_disabled: RemovedComponents<InteractionDisabled>,
     mut removed_checked: RemovedComponents<Checked>,
+    mut remove_pressed: RemovedComponents<Pressed>,
     mut commands: Commands,
 ) {
     removed_disabled
         .read()
+        .chain(remove_pressed.read())
         .chain(removed_checked.read())
         .for_each(|ent| {
-            if let Ok((checkbox_ent, disabled, checked, hovered, font_color)) =
+            if let Ok((checkbox_ent, disabled, checked, pressed, hovered, font_color)) =
                 q_checkboxes.get(ent)
             {
                 let Some(outline_ent) = q_children
@@ -290,6 +300,7 @@ fn update_checkbox_styles_remove(
                     mark_ent,
                     disabled,
                     checked,
+                    pressed,
                     hovered.0,
                     outline_bg,
                     outline_border,
@@ -307,6 +318,7 @@ fn set_checkbox_styles(
     mark_ent: Entity,
     disabled: bool,
     checked: bool,
+    pressed: bool,
     hovered: bool,
     outline_bg: &ThemeBackgroundColor,
     outline_border: &ThemeBorderColor,
