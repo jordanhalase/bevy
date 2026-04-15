@@ -98,7 +98,7 @@ pub const CHECKBOX_BG_DISABLED: ThemeToken =
     ThemeToken::new_static("feathers.checkbox.bg.disabled");
 /// Checkbox background around the checkmark
 pub const CHECKBOX_BG_CHECKED: ThemeToken = ThemeToken::new_static("feathers.checkbox.bg.checked");
-/// Checkbox border around the checkmark (disabled)
+/// Checkbox border around the checkmark (checked+disabled)
 pub const CHECKBOX_BG_CHECKED_DISABLED: ThemeToken =
     ThemeToken::new_static("feathers.checkbox.bg.checked.disabled");
 /// Checkbox border around the checkmark
@@ -106,6 +106,12 @@ pub const CHECKBOX_BORDER: ThemeToken = ThemeToken::new_static("feathers.checkbo
 /// Checkbox border around the checkmark (hovered)
 pub const CHECKBOX_BORDER_HOVER: ThemeToken =
     ThemeToken::new_static("feathers.checkbox.border.hover");
+/// Checkbox border around the checkmark (checked)
+pub const CHECKBOX_BORDER_CHECKED: ThemeToken =
+    ThemeToken::new_static("feathers.checkbox.border.checked");
+/// Checkbox border around the checkmark (checked+hovered)
+pub const CHECKBOX_BORDER_CHECKED_HOVER: ThemeToken =
+    ThemeToken::new_static("feathers.checkbox.border.checked.hover");
 /// Checkbox border around the checkmark (disabled)
 pub const CHECKBOX_BORDER_DISABLED: ThemeToken =
     ThemeToken::new_static("feathers.checkbox.border.disabled");

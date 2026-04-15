@@ -67,6 +67,8 @@ pub fn create_dark_theme() -> ThemeProps {
                 tokens::CHECKBOX_BORDER_DISABLED,
                 palette::GRAY_3.with_alpha(0.5),
             ),
+            (tokens::CHECKBOX_BORDER_CHECKED, palette::ACCENT),
+            (tokens::CHECKBOX_BORDER_CHECKED_HOVER, palette::ACCENT), // TODO
             (tokens::CHECKBOX_MARK, palette::WHITE),
             (tokens::CHECKBOX_MARK_DISABLED, palette::LIGHT_GRAY_2),
             (tokens::CHECKBOX_TEXT, palette::LIGHT_GRAY_1),

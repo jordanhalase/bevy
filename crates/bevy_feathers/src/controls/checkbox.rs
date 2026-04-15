@@ -314,10 +314,20 @@ fn set_checkbox_styles(
     font_color: &ThemeFontColor,
     commands: &mut Commands,
 ) {
-    let outline_border_token = match (disabled, hovered) {
-        (true, _) => tokens::CHECKBOX_BORDER_DISABLED,
-        (false, true) => tokens::CHECKBOX_BORDER_HOVER,
-        _ => tokens::CHECKBOX_BORDER,
+    let outline_border_token = if disabled {
+        tokens::CHECKBOX_BORDER_DISABLED
+    } else if checked {
+        if hovered {
+            tokens::CHECKBOX_BORDER_CHECKED_HOVER
+        } else {
+            tokens::CHECKBOX_BORDER_CHECKED
+        }
+    } else {
+        if hovered {
+            tokens::CHECKBOX_BORDER_HOVER
+        } else {
+            tokens::CHECKBOX_BORDER
+        }
     };
 
     let outline_bg_token = match (disabled, checked) {
