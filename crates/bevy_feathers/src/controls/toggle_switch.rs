@@ -266,7 +266,7 @@ fn update_switch_styles_remove(
         });
 }
 
-#[allow(clippy::collapsible_else_if, reason = "Used deliberately")]
+#[expect(clippy::collapsible_else_if, reason = "Used deliberately")]
 fn set_switch_styles(
     switch_ent: Entity,
     slide_ent: Entity,

@@ -327,7 +327,7 @@ fn update_checkbox_styles_remove(
         });
 }
 
-#[allow(clippy::collapsible_else_if, reason = "Used deliberately")]
+#[expect(clippy::collapsible_else_if, reason = "Used deliberately")]
 fn set_checkbox_styles(
     checkbox_ent: Entity,
     outline_ent: Entity,
