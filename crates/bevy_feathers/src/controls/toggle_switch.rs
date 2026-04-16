@@ -281,6 +281,7 @@ fn set_switch_styles(
     slide_border_color: &ThemeBorderColor,
     commands: &mut Commands,
 ) {
+    #[allow(clippy::collapsible_else_if)]
     let outline_border_token = if checked {
         if disabled {
             tokens::SWITCH_BORDER_CHECKED_DISABLED
@@ -303,6 +304,7 @@ fn set_switch_styles(
         }
     };
 
+    #[allow(clippy::collapsible_else_if)]
     let outline_bg_token = if checked {
         if disabled {
             tokens::SWITCH_BG_CHECKED_DISABLED
@@ -325,6 +327,7 @@ fn set_switch_styles(
         }
     };
 
+    #[allow(clippy::collapsible_else_if)]
     let slide_border_token = if checked {
         if disabled {
             tokens::SWITCH_SLIDE_BORDER_CHECKED_DISABLED
@@ -347,6 +350,7 @@ fn set_switch_styles(
         }
     };
 
+    #[allow(clippy::collapsible_else_if)]
     let slide_bg_token = if checked {
         if disabled {
             tokens::SWITCH_SLIDE_BG_CHECKED_DISABLED

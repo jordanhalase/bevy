@@ -342,6 +342,7 @@ fn set_checkbox_styles(
     font_color: &ThemeFontColor,
     commands: &mut Commands,
 ) {
+    #[allow(clippy::collapsible_else_if)]
     let outline_border_token = if checked {
         if disabled {
             tokens::CHECKBOX_BORDER_CHECKED_DISABLED
@@ -364,6 +365,7 @@ fn set_checkbox_styles(
         }
     };
 
+    #[allow(clippy::collapsible_else_if)]
     let outline_bg_token = if checked {
         if disabled {
             tokens::CHECKBOX_BG_CHECKED_DISABLED
