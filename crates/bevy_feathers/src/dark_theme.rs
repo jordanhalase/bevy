@@ -71,7 +71,7 @@ pub fn create_dark_theme() -> ThemeProps {
             ),
             (
                 tokens::CHECKBOX_BG_CHECKED_DISABLED,
-                palette::GRAY_3.with_alpha(0.5),
+                palette::GRAY_1.with_alpha(0.5),
             ),
             (tokens::CHECKBOX_BORDER, palette::GRAY_3),
             (tokens::CHECKBOX_BORDER_HOVER, palette::GRAY_3.lighter(0.05)),
