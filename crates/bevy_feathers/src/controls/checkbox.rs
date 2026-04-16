@@ -23,7 +23,7 @@ use bevy_ui::{
     AlignItems, BorderRadius, Checked, Display, FlexDirection, InteractionDisabled, JustifyContent,
     Node, PositionType, Pressed, UiRect, UiTransform, Val,
 };
-use bevy_ui_widgets::Checkbox;
+use bevy_ui_widgets::{ActivateOnPress, Checkbox};
 
 use crate::{
     constants::{fonts, size},
@@ -202,6 +202,7 @@ fn update_checkbox_styles(
             Has<InteractionDisabled>,
             Has<Checked>,
             Has<Pressed>,
+            Has<ActivateOnPress>,
             &Hovered,
             &ThemeFontColor,
         ),
@@ -220,7 +221,9 @@ fn update_checkbox_styles(
     mut q_mark: Query<&ThemeBorderColor, With<CheckboxMark>>,
     mut commands: Commands,
 ) {
-    for (checkbox_ent, disabled, checked, pressed, hovered, font_color) in q_checkboxes.iter() {
+    for (checkbox_ent, disabled, checked, pressed, activate_on_press, hovered, font_color) in
+        q_checkboxes.iter()
+    {
         let Some(outline_ent) = q_children
             .iter_descendants(checkbox_ent)
             .find(|en| q_outline.contains(*en))
@@ -243,6 +246,7 @@ fn update_checkbox_styles(
             checked,
             pressed,
             hovered.0,
+            activate_on_press,
             outline_bg,
             outline_border,
             mark_color,
@@ -259,6 +263,7 @@ fn update_checkbox_styles_remove(
             Has<InteractionDisabled>,
             Has<Checked>,
             Has<Pressed>,
+            Has<ActivateOnPress>,
             &Hovered,
             &ThemeFontColor,
         ),
@@ -270,15 +275,24 @@ fn update_checkbox_styles_remove(
     mut removed_disabled: RemovedComponents<InteractionDisabled>,
     mut removed_checked: RemovedComponents<Checked>,
     mut remove_pressed: RemovedComponents<Pressed>,
+    mut remove_activate_on_press: RemovedComponents<ActivateOnPress>,
     mut commands: Commands,
 ) {
     removed_disabled
         .read()
         .chain(removed_checked.read())
         .chain(remove_pressed.read())
+        .chain(remove_activate_on_press.read())
         .for_each(|ent| {
-            if let Ok((checkbox_ent, disabled, checked, pressed, hovered, font_color)) =
-                q_checkboxes.get(ent)
+            if let Ok((
+                checkbox_ent,
+                disabled,
+                checked,
+                pressed,
+                activate_on_press,
+                hovered,
+                font_color,
+            )) = q_checkboxes.get(ent)
             {
                 let Some(outline_ent) = q_children
                     .iter_descendants(checkbox_ent)
@@ -302,6 +316,7 @@ fn update_checkbox_styles_remove(
                     checked,
                     pressed,
                     hovered.0,
+                    activate_on_press,
                     outline_bg,
                     outline_border,
                     mark_color,
@@ -320,6 +335,7 @@ fn set_checkbox_styles(
     checked: bool,
     pressed: bool,
     hovered: bool,
+    activate_on_press: bool,
     outline_bg: &ThemeBackgroundColor,
     outline_border: &ThemeBorderColor,
     mark_color: &ThemeBorderColor,
@@ -329,7 +345,7 @@ fn set_checkbox_styles(
     let outline_border_token = if checked {
         if disabled {
             tokens::CHECKBOX_BORDER_CHECKED_DISABLED
-        } else if pressed {
+        } else if pressed && !activate_on_press {
             tokens::CHECKBOX_BORDER_CHECKED_PRESSED
         } else if hovered {
             tokens::CHECKBOX_BORDER_CHECKED_HOVER
@@ -339,7 +355,7 @@ fn set_checkbox_styles(
     } else {
         if disabled {
             tokens::CHECKBOX_BORDER_DISABLED
-        } else if pressed {
+        } else if pressed && !activate_on_press {
             tokens::CHECKBOX_BORDER_PRESSED
         } else if hovered {
             tokens::CHECKBOX_BORDER_HOVER
@@ -351,7 +367,7 @@ fn set_checkbox_styles(
     let outline_bg_token = if checked {
         if disabled {
             tokens::CHECKBOX_BG_CHECKED_DISABLED
-        } else if pressed {
+        } else if pressed && !activate_on_press {
             tokens::CHECKBOX_BG_CHECKED_PRESSED
         } else if hovered {
             tokens::CHECKBOX_BG_CHECKED_HOVER
@@ -361,7 +377,7 @@ fn set_checkbox_styles(
     } else {
         if disabled {
             tokens::CHECKBOX_BG_DISABLED
-        } else if pressed {
+        } else if pressed && !activate_on_press {
             tokens::CHECKBOX_BG_PRESSED
         } else if hovered {
             tokens::CHECKBOX_BG_HOVER

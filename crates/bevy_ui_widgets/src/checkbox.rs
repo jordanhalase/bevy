@@ -56,7 +56,10 @@ fn checkbox_on_key_input(
 
 fn checkbox_on_pointer_click(
     mut click: On<Pointer<Click>>,
-    q_checkbox: Query<(Has<Checked>, Has<InteractionDisabled>), With<Checkbox>>,
+    q_checkbox: Query<
+        (Has<Checked>, Has<InteractionDisabled>),
+        (With<Checkbox>, Without<ActivateOnPress>),
+    >,
     mut commands: Commands,
 ) {
     if let Ok((is_checked, disabled)) = q_checkbox.get(click.entity) {

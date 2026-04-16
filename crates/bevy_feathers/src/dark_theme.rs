@@ -72,10 +72,10 @@ pub fn create_dark_theme() -> ThemeProps {
                 palette::GRAY_3.with_alpha(0.5),
             ),
             (tokens::CHECKBOX_BORDER, palette::GRAY_3),
-            (tokens::CHECKBOX_BORDER_HOVER, palette::GRAY_3.lighter(0.1)),
+            (tokens::CHECKBOX_BORDER_HOVER, palette::GRAY_3.lighter(0.05)),
             (
                 tokens::CHECKBOX_BORDER_PRESSED,
-                palette::GRAY_3.lighter(0.15),
+                palette::GRAY_3.lighter(0.1),
             ),
             (
                 tokens::CHECKBOX_BORDER_DISABLED,
