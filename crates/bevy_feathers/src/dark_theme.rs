@@ -214,7 +214,7 @@ pub fn create_dark_theme() -> ThemeProps {
             ),
             (
                 tokens::SWITCH_SLIDE_BORDER_CHECKED_DISABLED,
-                palette::GRAY_1.with_alpha(0.5),
+                Color::srgba(0.0, 0.0, 0.0, 0.0),
             ),
             (tokens::COLOR_PLANE_BG, palette::GRAY_1),
             // Menus
