@@ -116,7 +116,7 @@ pub const CHECKBOX_BORDER: ThemeToken = ThemeToken::new_static("feathers.checkbo
 /// Checkbox border around the checkmark (hovered)
 pub const CHECKBOX_BORDER_HOVER: ThemeToken =
     ThemeToken::new_static("feathers.checkbox.border.hover");
-/// Checkbox border around the checkmark (hovered)
+/// Checkbox border around the checkmark (pressed)
 pub const CHECKBOX_BORDER_PRESSED: ThemeToken =
     ThemeToken::new_static("feathers.checkbox.border.pressed");
 /// Checkbox border around the checkmark (disabled)
