@@ -292,15 +292,36 @@ fn set_radio_styles(
     font_color: &ThemeFontColor,
     commands: &mut Commands,
 ) {
-    let outline_border_token = match (disabled, hovered) {
-        (true, _) => tokens::RADIO_BORDER_DISABLED,
-        (false, true) => tokens::RADIO_BORDER_HOVER,
-        _ => tokens::RADIO_BORDER,
+    let outline_border_token = if checked {
+        if disabled {
+            tokens::RADIO_BORDER_CHECKED_DISABLED
+            //} else if pressed && !activate_on_press { // TODO
+            //tokens::RADIO_BORDER_CHECKED_PRESSED
+        } else if hovered {
+            tokens::RADIO_BORDER_CHECKED_HOVER
+        } else {
+            tokens::RADIO_BORDER_CHECKED
+        }
+    } else {
+        if disabled {
+            tokens::RADIO_BORDER_DISABLED
+            //} else if pressed && !activate_on_press { // TODO
+            //tokens::RADIO_BORDER_PRESSED
+        } else if hovered {
+            tokens::RADIO_BORDER_HOVER
+        } else {
+            tokens::RADIO_BORDER
+        }
     };
 
-    let mark_token = match disabled {
-        true => tokens::RADIO_MARK_DISABLED,
-        false => tokens::RADIO_MARK,
+    let mark_token = if disabled {
+        tokens::RADIO_MARK_DISABLED
+        //} else if pressed && !activate_on_press { // TODO
+        //tokens::RADIO_MARK_PRESSED
+    } else if hovered {
+        tokens::RADIO_MARK_HOVER
+    } else {
+        tokens::RADIO_MARK
     };
 
     let font_color_token = match disabled {
