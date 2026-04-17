@@ -342,7 +342,7 @@ fn demo_column_1() -> impl Scene {
             (
                 checkbox(CheckboxProps {
                     caption: Box::new(bsn_list!(
-                        (Text("Disabled+Checked") ThemedText),
+                        (Text("Checked+Disabled") ThemedText),
                     )),
                 })
                 InteractionDisabled
