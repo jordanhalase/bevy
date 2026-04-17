@@ -345,7 +345,7 @@ fn set_radio_styles(
     if mark_color.0 != mark_token {
         commands
             .entity(mark_ent)
-            .insert(ThemeBorderColor(mark_token));
+            .insert(ThemeBackgroundColor(mark_token));
     }
 
     // Change mark visibility
