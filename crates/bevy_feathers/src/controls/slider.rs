@@ -236,13 +236,16 @@ fn update_slider_styles(
 }
 
 fn update_slider_styles_remove(
-    mut q_sliders: Query<(
-        Entity,
-        Has<InteractionDisabled>,
-        Has<Pressed>,
-        &Hovered,
-        &mut BackgroundGradient,
-    )>,
+    mut q_sliders: Query<
+        (
+            Entity,
+            Has<InteractionDisabled>,
+            Has<Pressed>,
+            &Hovered,
+            &mut BackgroundGradient,
+        ),
+        With<SliderStyle>,
+    >,
     mut removed_disabled: RemovedComponents<InteractionDisabled>,
     mut remove_pressed: RemovedComponents<Pressed>,
     theme: Res<UiTheme>,
