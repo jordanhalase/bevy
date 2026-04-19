@@ -46,11 +46,11 @@ pub fn create_dark_theme() -> ThemeProps {
             (tokens::SLIDER_BG, palette::GRAY_1),
             (tokens::SLIDER_BG_HOVER, palette::GRAY_1.lighter(0.05)),
             (tokens::SLIDER_BG_PRESSED, palette::GRAY_1.lighter(0.1)),
-            (tokens::SLIDER_BG_DISABLED, palette::GRAY_2),
+            (tokens::SLIDER_BG_DISABLED, palette::GRAY_1.with_alpha(0.5)),
             (tokens::SLIDER_BAR, palette::ACCENT),
             (tokens::SLIDER_BAR_HOVER, palette::ACCENT.lighter(0.05)),
             (tokens::SLIDER_BAR_PRESSED, palette::ACCENT.lighter(0.1)),
-            (tokens::SLIDER_BAR_DISABLED, palette::GRAY_2),
+            (tokens::SLIDER_BAR_DISABLED, palette::GRAY_2.with_alpha(0.5)),
             (tokens::SLIDER_TEXT, palette::WHITE),
             (tokens::SLIDER_TEXT_DISABLED, palette::WHITE.with_alpha(0.5)),
             // Scrollbar
