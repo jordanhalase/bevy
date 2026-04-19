@@ -211,7 +211,12 @@ fn update_slider_styles(
         ),
         (
             With<SliderStyle>,
-            Or<(Spawned, Added<InteractionDisabled>, Added<Pressed>)>,
+            Or<(
+                Spawned,
+                Added<InteractionDisabled>,
+                Changed<Hovered>,
+                Added<Pressed>,
+            )>,
         ),
     >,
     theme: Res<UiTheme>,
@@ -272,12 +277,25 @@ fn set_slider_styles(
     gradient: &mut BackgroundGradient,
     commands: &mut Commands,
 ) {
-    let bar_color = theme.color(&match disabled {
-        true => tokens::SLIDER_BAR_DISABLED,
-        false => tokens::SLIDER_BAR,
+    let bar_color = theme.color(&if disabled {
+        tokens::SLIDER_BAR_DISABLED
+    } else if pressed {
+        tokens::SLIDER_BAR_PRESSED
+    } else if hovered {
+        tokens::SLIDER_BAR_HOVER
+    } else {
+        tokens::SLIDER_BAR
     });
 
-    let bg_color = theme.color(&tokens::SLIDER_BG);
+    let bg_color = theme.color(&if disabled {
+        tokens::SLIDER_BG_DISABLED
+    } else if pressed {
+        tokens::SLIDER_BG_PRESSED
+    } else if hovered {
+        tokens::SLIDER_BG_HOVER
+    } else {
+        tokens::SLIDER_BG
+    });
 
     let cursor_shape = match disabled {
         true => bevy_window::SystemCursorIcon::NotAllowed,
