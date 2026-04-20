@@ -29,12 +29,11 @@ use bevy::{
     text::{EditableText, TextEdit, TextEditChange},
     ui::{Checked, InteractionDisabled},
     ui_widgets::{
-        checkbox_self_update, slider_self_update, Activate, ActivateOnPress, RadioButton,
-        RadioGroup, SliderPrecision, SliderStep, SliderValue, ValueChange,
+        checkbox_self_update, radio_self_update, slider_self_update, Activate, ActivateOnPress,
+        RadioButton, RadioGroup, SliderPrecision, SliderStep, SliderValue, ValueChange,
     },
     window::SystemCursorIcon,
 };
-use bevy_ecs::relationship::Relationship;
 
 /// A struct to hold the state of various widgets shown in the demo.
 #[derive(Resource)]
@@ -357,23 +356,7 @@ fn demo_column_1() -> impl Scene {
                     row_gap: px(4),
                 }
                 RadioGroup
-                on(
-                    |value_change: On<ValueChange<Entity>>,
-                        q_radio: Query<Entity, With<RadioButton>>,
-                        q_parents: Query<&ChildOf>,
-                        mut commands: Commands| {
-                        for radio in q_radio.iter() {
-                            if radio == value_change.value {
-                                commands.entity(radio).insert(Checked);
-                            } else if let Ok(child_of) = q_parents.get(radio) {
-                                if child_of.get() == value_change.source {
-                                    // Only uncheck other radio buttons in the same group
-                                    commands.entity(radio).remove::<Checked>();
-                                }
-                            }
-                        }
-                    }
-                )
+                on(radio_self_update)
                 Children [
                     (radio(RadioProps {
                         caption: Box::new(bsn_list!(
@@ -404,23 +387,7 @@ fn demo_column_1() -> impl Scene {
                     row_gap: px(4),
                 }
                 RadioGroup
-                on(
-                    |value_change: On<ValueChange<Entity>>,
-                        q_radio: Query<Entity, With<RadioButton>>,
-                        q_parents: Query<&ChildOf>,
-                        mut commands: Commands| {
-                        for radio in q_radio.iter() {
-                            if radio == value_change.value {
-                                commands.entity(radio).insert(Checked);
-                            } else if let Ok(child_of) = q_parents.get(radio) {
-                                if child_of.get() == value_change.source {
-                                    // Only uncheck other radio buttons in the same group
-                                    commands.entity(radio).remove::<Checked>();
-                                }
-                            }
-                        }
-                    }
-                )
+                on(radio_self_update)
                 Children [
                     (radio(RadioProps {
                         caption: Box::new(bsn_list!(

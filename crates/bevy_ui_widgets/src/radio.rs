@@ -8,6 +8,7 @@ use bevy_ecs::{
     observer::On,
     query::{Has, With, Without},
     reflect::ReflectComponent,
+    relationship::Relationship,
     system::{Commands, Query},
 };
 use bevy_input::keyboard::{KeyCode, KeyboardInput};
@@ -328,5 +329,26 @@ impl Plugin for RadioGroupPlugin {
             .add_observer(radio_button_on_pointer_up)
             .add_observer(radio_button_on_pointer_drag_end)
             .add_observer(radio_button_on_pointer_cancel);
+    }
+}
+
+/// Observer function which updates the radio button in response to a [`ValueChange`] event.
+/// This can be used to make the radio button automatically update its own state and within
+/// the correct radio group when clicked, as opposed to managing the checkbox state externally.
+pub fn radio_self_update(
+    value_change: On<ValueChange<Entity>>,
+    q_radio: Query<Entity, With<RadioButton>>,
+    q_parents: Query<&ChildOf>,
+    mut commands: Commands,
+) {
+    for radio in q_radio.iter() {
+        if radio == value_change.value {
+            commands.entity(radio).insert(Checked);
+        } else if let Ok(child_of) = q_parents.get(radio) {
+            if child_of.get() == value_change.source {
+                // Only uncheck other radio buttons in the same group
+                commands.entity(radio).remove::<Checked>();
+            }
+        }
     }
 }
