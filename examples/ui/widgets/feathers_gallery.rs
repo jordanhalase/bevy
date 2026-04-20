@@ -34,6 +34,7 @@ use bevy::{
     },
     window::SystemCursorIcon,
 };
+use bevy_ecs::relationship::Relationship;
 
 /// A struct to hold the state of various widgets shown in the demo.
 #[derive(Resource)]
@@ -359,12 +360,63 @@ fn demo_column_1() -> impl Scene {
                 on(
                     |value_change: On<ValueChange<Entity>>,
                         q_radio: Query<Entity, With<RadioButton>>,
+                        q_parents: Query<&ChildOf>,
                         mut commands: Commands| {
                         for radio in q_radio.iter() {
                             if radio == value_change.value {
                                 commands.entity(radio).insert(Checked);
-                            } else {
-                                commands.entity(radio).remove::<Checked>();
+                            } else if let Ok(child_of) = q_parents.get(radio) {
+                                if child_of.get() == value_change.source {
+                                    // Only uncheck other radio buttons in the same group
+                                    commands.entity(radio).remove::<Checked>();
+                                }
+                            }
+                        }
+                    }
+                )
+                Children [
+                    (radio(RadioProps {
+                        caption: Box::new(bsn_list!(
+                            (Text("One") ThemedText),
+                        )),
+                    }) Checked),
+                    (radio(RadioProps {
+                        caption: Box::new(bsn_list!(
+                            (Text("Two") ThemedText),
+                        )),
+                    })),
+                    (radio(RadioProps {
+                        caption: Box::new(bsn_list!(
+                            (Text("Fast Click") ThemedText),
+                        )),
+                    }) ActivateOnPress),
+                    (radio(RadioProps {
+                        caption: Box::new(bsn_list!(
+                            (Text("Disabled") ThemedText),
+                        )),
+                    }) InteractionDisabled),
+                ]
+            ),
+            (
+                Node {
+                    display: Display::Flex,
+                    flex_direction: FlexDirection::Column,
+                    row_gap: px(4),
+                }
+                RadioGroup
+                on(
+                    |value_change: On<ValueChange<Entity>>,
+                        q_radio: Query<Entity, With<RadioButton>>,
+                        q_parents: Query<&ChildOf>,
+                        mut commands: Commands| {
+                        for radio in q_radio.iter() {
+                            if radio == value_change.value {
+                                commands.entity(radio).insert(Checked);
+                            } else if let Ok(child_of) = q_parents.get(radio) {
+                                if child_of.get() == value_change.source {
+                                    // Only uncheck other radio buttons in the same group
+                                    commands.entity(radio).remove::<Checked>();
+                                }
                             }
                         }
                     }
