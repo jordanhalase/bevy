@@ -277,7 +277,7 @@ fn radio_button_on_pointer_drag_end(
     }
 }
 
-fn checkbox_on_pointer_cancel(
+fn radio_button_on_pointer_cancel(
     mut cancel: On<Pointer<Cancel>>,
     mut q_radio: Query<(Entity, Has<InteractionDisabled>, Has<Pressed>), With<RadioButton>>,
     mut commands: Commands,
@@ -327,6 +327,6 @@ impl Plugin for RadioGroupPlugin {
             .add_observer(radio_button_on_pointer_down)
             .add_observer(radio_button_on_pointer_up)
             .add_observer(radio_button_on_pointer_drag_end)
-            .add_observer(checkbox_on_pointer_cancel);
+            .add_observer(radio_button_on_pointer_cancel);
     }
 }
