@@ -331,9 +331,9 @@ impl Plugin for RadioGroupPlugin {
     }
 }
 
-/// Observer function which updates the radio button in response to a [`ValueChange`] event.
-/// This can be used to make the radio button automatically update its own state and within
-/// the correct radio group when clicked, as opposed to managing the checkbox state externally.
+/// Observer function which updates the radio buttons in a group in response to a [`ValueChange`] event.
+/// This can be used to make the radio buttons automatically update their own states and within
+/// the correct radio group when clicked, as opposed to managing the states externally.
 pub fn radio_self_update(
     value_change: On<ValueChange<Entity>>,
     q_radio_group: Query<&Children, With<RadioGroup>>,
