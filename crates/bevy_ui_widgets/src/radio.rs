@@ -8,7 +8,6 @@ use bevy_ecs::{
     observer::On,
     query::{Has, With, Without},
     reflect::ReflectComponent,
-    relationship::Relationship,
     system::{Commands, Query},
 };
 use bevy_input::keyboard::{KeyCode, KeyboardInput};
@@ -337,40 +336,16 @@ impl Plugin for RadioGroupPlugin {
 /// the correct radio group when clicked, as opposed to managing the checkbox state externally.
 pub fn radio_self_update(
     value_change: On<ValueChange<Entity>>,
-    q_radio: Query<Entity, With<RadioButton>>,
-    q_parents: Query<&ChildOf>,
-    mut commands: Commands,
-) {
-    for radio in q_radio.iter() {
-        if radio == value_change.value {
-            commands.entity(radio).insert(Checked);
-        } else if let Ok(child_of) = q_parents.get(radio) {
-            if child_of.get() == value_change.source {
-                // Only uncheck other radio buttons in the same group
-                commands.entity(radio).remove::<Checked>();
-            }
-        }
-    }
-}
-
-/// Observer function which updates the radio button in response to a [`ValueChange`] event.
-/// This can be used to make the radio button automatically update its own state and within
-/// the correct radio group when clicked, as opposed to managing the checkbox state externally.
-pub fn radio_self_update2(
-    value_change: On<ValueChange<Entity>>,
-    q_radio_group: Query<(Entity, &Children), With<RadioGroup>>,
+    q_radio_group: Query<&Children, With<RadioGroup>>,
     q_radio: Query<Entity, With<RadioButton>>,
     mut commands: Commands,
 ) {
     // Get the children of the source radio group
-    let Some((_radio_group, children)) = q_radio_group
-        .iter()
-        .find(|(group, _)| *group == value_change.source)
-    else {
+    let Ok(children) = q_radio_group.get(value_change.source) else {
         return;
     };
 
-    // Iterate the children for this radio group
+    // Iterate the children of this radio group
     let mut iter = q_radio.iter_many(children);
     while let Some(radio) = iter.fetch_next() {
         if radio == value_change.value {

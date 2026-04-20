@@ -29,7 +29,7 @@ use bevy::{
     text::{EditableText, TextEdit, TextEditChange},
     ui::{Checked, InteractionDisabled},
     ui_widgets::{
-        checkbox_self_update, radio_self_update2, slider_self_update, Activate, ActivateOnPress,
+        checkbox_self_update, radio_self_update, slider_self_update, Activate, ActivateOnPress,
         RadioButton, RadioGroup, SliderPrecision, SliderStep, SliderValue, ValueChange,
     },
     window::SystemCursorIcon,
@@ -356,7 +356,7 @@ fn demo_column_1() -> impl Scene {
                     row_gap: px(4),
                 }
                 RadioGroup
-                on(radio_self_update2)
+                on(radio_self_update)
                 Children [
                     (radio(RadioProps {
                         caption: Box::new(bsn_list!(
@@ -387,7 +387,7 @@ fn demo_column_1() -> impl Scene {
                     row_gap: px(4),
                 }
                 RadioGroup
-                on(radio_self_update2)
+                on(radio_self_update)
                 Children [
                     (radio(RadioProps {
                         caption: Box::new(bsn_list!(
