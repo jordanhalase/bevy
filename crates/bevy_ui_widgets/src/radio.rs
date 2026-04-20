@@ -352,3 +352,31 @@ pub fn radio_self_update(
         }
     }
 }
+
+/// Observer function which updates the radio button in response to a [`ValueChange`] event.
+/// This can be used to make the radio button automatically update its own state and within
+/// the correct radio group when clicked, as opposed to managing the checkbox state externally.
+pub fn radio_self_update2(
+    value_change: On<ValueChange<Entity>>,
+    q_radio_group: Query<(Entity, &Children), With<RadioGroup>>,
+    q_radio: Query<Entity, With<RadioButton>>,
+    mut commands: Commands,
+) {
+    // Get the children of the source radio group
+    let Some((_radio_group, children)) = q_radio_group
+        .iter()
+        .find(|(group, _)| *group == value_change.source)
+    else {
+        return;
+    };
+
+    // Iterate the children for this radio group
+    let mut iter = q_radio.iter_many(children);
+    while let Some(radio) = iter.fetch_next() {
+        if radio == value_change.value {
+            commands.entity(radio).insert(Checked);
+        } else {
+            commands.entity(radio).remove::<Checked>();
+        }
+    }
+}
