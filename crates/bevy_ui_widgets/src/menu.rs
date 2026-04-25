@@ -152,7 +152,7 @@ fn menu_acquire_focus(
             match tab_navigation.initialize(menu, nav) {
                 Ok(next) => {
                     *menu_focus = MenuFocusState::Open;
-                    focus.set(next);
+                    focus.set(next, false);
                 }
                 Err(e) => {
                     warn!(
@@ -257,7 +257,7 @@ fn menu_on_key_event(
                 KeyCode::ArrowUp if menu.layout == MenuLayout::Column => {
                     ev.propagate(false);
                     if let Ok(next) = tab_navigation.navigate(&focus, NavAction::Previous) {
-                        focus.set(next);
+                        focus.set(next, true);
                     } else {
                         focus.clear();
                     }
@@ -267,7 +267,7 @@ fn menu_on_key_event(
                 KeyCode::ArrowDown if menu.layout == MenuLayout::Column => {
                     ev.propagate(false);
                     if let Ok(next) = tab_navigation.navigate(&focus, NavAction::Next) {
-                        focus.set(next);
+                        focus.set(next, true);
                     } else {
                         focus.clear();
                     }
@@ -277,7 +277,7 @@ fn menu_on_key_event(
                 KeyCode::ArrowLeft if menu.layout == MenuLayout::Row => {
                     ev.propagate(false);
                     if let Ok(next) = tab_navigation.navigate(&focus, NavAction::Previous) {
-                        focus.set(next);
+                        focus.set(next, true);
                     } else {
                         focus.clear();
                     }
@@ -287,7 +287,7 @@ fn menu_on_key_event(
                 KeyCode::ArrowRight if menu.layout == MenuLayout::Row => {
                     ev.propagate(false);
                     if let Ok(next) = tab_navigation.navigate(&focus, NavAction::Next) {
-                        focus.set(next);
+                        focus.set(next, true);
                     } else {
                         focus.clear();
                     }
@@ -297,7 +297,7 @@ fn menu_on_key_event(
                 KeyCode::Home => {
                     ev.propagate(false);
                     if let Ok(next) = tab_navigation.navigate(&focus, NavAction::First) {
-                        focus.set(next);
+                        focus.set(next, true);
                     } else {
                         focus.clear();
                     }
@@ -307,7 +307,7 @@ fn menu_on_key_event(
                 KeyCode::End => {
                     ev.propagate(false);
                     if let Ok(next) = tab_navigation.navigate(&focus, NavAction::Last) {
-                        focus.set(next);
+                        focus.set(next, true);
                     } else {
                         focus.clear();
                     }

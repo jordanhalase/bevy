@@ -12,6 +12,7 @@ use bevy_ecs::prelude::*;
 pub struct FocusGained {
     /// The entity that gained focus.
     pub entity: Entity,
+    pub tabbed_in: bool,
 }
 
 /// An [`EntityEvent`] that is sent when an entity loses [`InputFocus`].
@@ -38,16 +39,26 @@ pub fn process_recorded_focus_changes(mut focus: ResMut<InputFocus>, mut command
     // so we can send the correct FocusLost events when focus changes.
     let mut previous_focus = focus.original_focus;
     for change in focus.bypass_change_detection().recorded_changes.drain(..) {
+        let changed_ent = {
+            if let Some((changed_ent, _tabbed_in)) = change {
+                Some(changed_ent)
+            } else {
+                None
+            }
+        };
         // Only send focus change events if the focused entity actually changed.
-        if change == previous_focus {
+        if changed_ent == previous_focus {
             continue;
         }
         match change {
-            Some(new_focus) => {
+            Some((new_focus, tabbed_in)) => {
                 if let Some(old_focus) = previous_focus {
                     commands.trigger(FocusLost { entity: old_focus });
                 }
-                commands.trigger(FocusGained { entity: new_focus });
+                commands.trigger(FocusGained {
+                    entity: new_focus,
+                    tabbed_in,
+                });
                 previous_focus = Some(new_focus);
             }
             None => {
@@ -117,7 +128,9 @@ mod tests {
         let mut app = setup_app();
 
         let entity = app.world_mut().spawn_empty().id();
-        app.world_mut().resource_mut::<InputFocus>().set(entity);
+        app.world_mut()
+            .resource_mut::<InputFocus>()
+            .set(entity, false);
         app.update();
 
         assert_eq!(take_log(&mut app), vec![FocusEvent::Gained(entity)]);
@@ -129,7 +142,9 @@ mod tests {
         let entity = app.world_mut().spawn_empty().id();
 
         // Establish initial focus.
-        app.world_mut().resource_mut::<InputFocus>().set(entity);
+        app.world_mut()
+            .resource_mut::<InputFocus>()
+            .set(entity, false);
         app.update();
         take_log(&mut app);
 
@@ -145,11 +160,11 @@ mod tests {
         let a = app.world_mut().spawn_empty().id();
         let b = app.world_mut().spawn_empty().id();
 
-        app.world_mut().resource_mut::<InputFocus>().set(a);
+        app.world_mut().resource_mut::<InputFocus>().set(a, false);
         app.update();
         take_log(&mut app);
 
-        app.world_mut().resource_mut::<InputFocus>().set(b);
+        app.world_mut().resource_mut::<InputFocus>().set(b, false);
         app.update();
 
         assert_eq!(
@@ -168,10 +183,10 @@ mod tests {
         let c = app.world_mut().spawn_empty().id();
 
         let mut focus = app.world_mut().resource_mut::<InputFocus>();
-        focus.set(a);
-        focus.set(b);
+        focus.set(a, false);
+        focus.set(b, false);
         focus.clear();
-        focus.set(c);
+        focus.set(c, false);
 
         app.update();
 
@@ -204,7 +219,9 @@ mod tests {
         let mut app = setup_app();
         let entity = app.world_mut().spawn_empty().id();
 
-        app.world_mut().resource_mut::<InputFocus>().set(entity);
+        app.world_mut()
+            .resource_mut::<InputFocus>()
+            .set(entity, false);
         app.update();
         take_log(&mut app);
 
@@ -225,7 +242,9 @@ mod tests {
         let child = app.world_mut().spawn_empty().id();
         let parent = app.world_mut().spawn_empty().add_child(child).id();
 
-        app.world_mut().resource_mut::<InputFocus>().set(child);
+        app.world_mut()
+            .resource_mut::<InputFocus>()
+            .set(child, true);
         app.update();
 
         // The event fires on the child, then bubbles to the parent.
@@ -258,7 +277,9 @@ mod tests {
         let mut app = setup_app();
         let entity = app.world_mut().spawn_empty().id();
 
-        app.world_mut().resource_mut::<InputFocus>().set(entity);
+        app.world_mut()
+            .resource_mut::<InputFocus>()
+            .set(entity, false);
         app.update();
         take_log(&mut app);
 

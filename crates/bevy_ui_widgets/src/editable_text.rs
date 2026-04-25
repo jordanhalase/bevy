@@ -196,7 +196,7 @@ fn on_pointer_press(
             TextEdit::MoveToPoint
         }(local_pos));
 
-    input_focus.set(press.entity);
+    input_focus.set(press.entity, false);
 
     press.propagate(false);
 }
@@ -422,6 +422,17 @@ fn on_focus_select_all(
     }
 }
 
+// TODO: Select all and clean up
+fn on_focus_gained(focus_gained: On<FocusGained>, q_text_input: Query<&mut EditableText>) {
+    let target = focus_gained.event_target();
+    if let Ok(_text_input) = q_text_input.get(target) {
+        let event = focus_gained.event();
+        if event.tabbed_in {
+            println!("TABBED IN");
+        }
+    }
+}
+
 /// `on_focus_select_all` defers selection until pointer release if the focus was gained
 /// by a pointer press. This system applies the queued selection.
 ///
@@ -480,6 +491,7 @@ impl Plugin for EditableTextInputPlugin {
             .add_observer(on_pointer_press)
             .add_observer(on_focus_lost_clear_ime)
             .add_observer(on_focus_select_all)
+            .add_observer(on_focus_gained)
             .add_systems(
                 PreUpdate,
                 (

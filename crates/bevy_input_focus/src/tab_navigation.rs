@@ -359,7 +359,7 @@ pub(crate) fn acquire_focus(
         acquire_focus.propagate(false);
         // Don't mutate unless we need to, for change detection
         if focus.get() != Some(acquire_focus.focused_entity) {
-            focus.set(acquire_focus.focused_entity);
+            focus.set(acquire_focus.focused_entity, true);
         }
     } else if windows.contains(acquire_focus.focused_entity) {
         // Stop and clear focus
@@ -446,7 +446,7 @@ pub fn handle_tab_navigation(
         match maybe_next {
             Ok(next) => {
                 event.propagate(false);
-                focus.set(next);
+                focus.set(next, true);
                 visible.0 = true;
             }
             Err(e) => {
@@ -454,7 +454,7 @@ pub fn handle_tab_navigation(
                 // This failure mode is recoverable, but still indicates a problem.
                 if let TabNavigationError::NoTabGroupForCurrentFocus { new_focus, .. } = e {
                     event.propagate(false);
-                    focus.set(new_focus);
+                    focus.set(new_focus, true);
                     visible.0 = true;
                 }
             }

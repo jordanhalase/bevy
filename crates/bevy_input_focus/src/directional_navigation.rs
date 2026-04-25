@@ -423,7 +423,7 @@ impl<'w> DirectionalNavigation<'w> {
                     direction,
                 }),
                 NavNeighbor::Set(new_focus) => {
-                    self.focus.set(new_focus);
+                    self.focus.set(new_focus, true);
                     Ok(new_focus)
                 }
             }
@@ -755,7 +755,7 @@ mod tests {
         world.insert_resource(map);
 
         let mut focus = InputFocus::default();
-        focus.set(a);
+        focus.set(a, false);
         world.insert_resource(focus);
 
         let config = AutoNavigationConfig::default();

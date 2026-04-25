@@ -165,7 +165,9 @@ impl<'w, 's> AutoDirectionalNavigator<'w, 's> {
             // Respect manual edges first
             match self.manual_directional_navigation.navigate(direction) {
                 Ok(new_focus) => {
-                    self.manual_directional_navigation.focus.set(new_focus);
+                    self.manual_directional_navigation
+                        .focus
+                        .set(new_focus, true);
                     Ok(new_focus)
                 }
                 Err(DirectionalNavigationError::NoNeighborInDirection { .. }) => {
@@ -178,7 +180,9 @@ impl<'w, 's> AutoDirectionalNavigator<'w, 's> {
                             &self.config,
                         )
                     {
-                        self.manual_directional_navigation.focus.set(new_focus);
+                        self.manual_directional_navigation
+                            .focus
+                            .set(new_focus, true);
                         Ok(new_focus)
                     } else {
                         Err(DirectionalNavigationError::NoNeighborInDirection {
