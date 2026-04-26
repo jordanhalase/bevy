@@ -107,7 +107,7 @@ pub struct InputFocus {
     /// The set of input focus changes that have been recorded since the last time [`FocusGained`] and [`FocusLost`] events were sent.
     ///
     /// These are stored in a first-in-first-out manner, so the most recent change is at the end of the vector.
-    recorded_changes: Vec<Option<(Entity, bool)>>,
+    recorded_changes: Vec<Option<(Entity, FocusCause)>>,
     /// The entity that had input focus at the time of the last sent [`FocusGained`] or [`FocusLost`] event, if any.
     ///
     /// This is used to determine which events to send when processing recorded focus changes.
@@ -126,7 +126,7 @@ impl InputFocus {
     pub fn from_entity(entity: Entity) -> Self {
         Self {
             current_focus: Some(entity),
-            recorded_changes: vec![Some((entity, false))],
+            recorded_changes: vec![Some((entity, FocusCause::default()))],
             original_focus: None,
         }
     }
@@ -137,9 +137,9 @@ impl InputFocus {
     /// which will automatically set focus to the entity when it is spawned.
     ///
     /// This is particularly useful when working with bsn! scenes, where spawning may be delayed.
-    pub fn set(&mut self, entity: Entity, tabbed_in: bool) {
+    pub fn set(&mut self, entity: Entity, cause: FocusCause) {
         self.current_focus = Some(entity);
-        self.recorded_changes.push(Some((entity, tabbed_in)));
+        self.recorded_changes.push(Some((entity, cause)));
     }
 
     /// Returns the entity with input focus, if any.
@@ -319,7 +319,7 @@ pub fn set_initial_focus(
     window: Single<Entity, With<PrimaryWindow>>,
 ) {
     if input_focus.get().is_none() {
-        input_focus.set(*window, false);
+        input_focus.set(*window, FocusCause::default());
     }
 }
 
@@ -662,7 +662,7 @@ mod tests {
 
         app.world_mut()
             .run_system_once(move |mut input_focus: ResMut<InputFocus>| {
-                input_focus.set(child_of_b, true);
+                input_focus.set(child_of_b, FocusCause::Tabbed);
             })
             .unwrap();
         assert!(app.world().is_focus_within(entity_b));

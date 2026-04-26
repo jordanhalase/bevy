@@ -3,6 +3,18 @@
 
 use super::InputFocus;
 use bevy_ecs::prelude::*;
+use bevy_reflect::Reflect;
+
+/// The cause for a [`FocusGained`]
+#[derive(Default, Reflect, PartialEq, Eq, Debug, Clone, Copy)]
+pub enum FocusCause {
+    /// The input was clicked into or otherwise default behavior
+    #[default]
+    Clicked,
+
+    /// The input was tabbed into or otherwise focused with the keyboard
+    Tabbed,
+}
 
 /// An [`EntityEvent`] that is sent when an entity gains [`InputFocus`].
 ///
@@ -10,9 +22,10 @@ use bevy_ecs::prelude::*;
 #[derive(EntityEvent, Debug, Clone)]
 #[entity_event(auto_propagate)]
 pub struct FocusGained {
-    /// The entity that gained focus.
+    /// The entity that gained focus
     pub entity: Entity,
-    pub tabbed_in: bool,
+    /// What caused this focus
+    pub cause: FocusCause,
 }
 
 /// An [`EntityEvent`] that is sent when an entity loses [`InputFocus`].
@@ -40,7 +53,7 @@ pub fn process_recorded_focus_changes(mut focus: ResMut<InputFocus>, mut command
     let mut previous_focus = focus.original_focus;
     for change in focus.bypass_change_detection().recorded_changes.drain(..) {
         let changed_ent = {
-            if let Some((changed_ent, _tabbed_in)) = change {
+            if let Some((changed_ent, _cause)) = change {
                 Some(changed_ent)
             } else {
                 None
@@ -51,13 +64,13 @@ pub fn process_recorded_focus_changes(mut focus: ResMut<InputFocus>, mut command
             continue;
         }
         match change {
-            Some((new_focus, tabbed_in)) => {
+            Some((new_focus, cause)) => {
                 if let Some(old_focus) = previous_focus {
                     commands.trigger(FocusLost { entity: old_focus });
                 }
                 commands.trigger(FocusGained {
                     entity: new_focus,
-                    tabbed_in,
+                    cause,
                 });
                 previous_focus = Some(new_focus);
             }
@@ -130,7 +143,7 @@ mod tests {
         let entity = app.world_mut().spawn_empty().id();
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, false);
+            .set(entity, FocusCause::default());
         app.update();
 
         assert_eq!(take_log(&mut app), vec![FocusEvent::Gained(entity)]);
@@ -144,7 +157,7 @@ mod tests {
         // Establish initial focus.
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, false);
+            .set(entity, FocusCause::default());
         app.update();
         take_log(&mut app);
 
@@ -160,11 +173,15 @@ mod tests {
         let a = app.world_mut().spawn_empty().id();
         let b = app.world_mut().spawn_empty().id();
 
-        app.world_mut().resource_mut::<InputFocus>().set(a, false);
+        app.world_mut()
+            .resource_mut::<InputFocus>()
+            .set(a, FocusCause::default());
         app.update();
         take_log(&mut app);
 
-        app.world_mut().resource_mut::<InputFocus>().set(b, false);
+        app.world_mut()
+            .resource_mut::<InputFocus>()
+            .set(b, FocusCause::default());
         app.update();
 
         assert_eq!(
@@ -183,10 +200,10 @@ mod tests {
         let c = app.world_mut().spawn_empty().id();
 
         let mut focus = app.world_mut().resource_mut::<InputFocus>();
-        focus.set(a, false);
-        focus.set(b, false);
+        focus.set(a, FocusCause::default());
+        focus.set(b, FocusCause::default());
         focus.clear();
-        focus.set(c, false);
+        focus.set(c, FocusCause::default());
 
         app.update();
 
@@ -221,7 +238,7 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, false);
+            .set(entity, FocusCause::default());
         app.update();
         take_log(&mut app);
 
@@ -244,7 +261,7 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(child, true);
+            .set(child, FocusCause::default());
         app.update();
 
         // The event fires on the child, then bubbles to the parent.
@@ -279,7 +296,7 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, false);
+            .set(entity, FocusCause::default());
         app.update();
         take_log(&mut app);
 

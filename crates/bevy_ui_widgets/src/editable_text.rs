@@ -11,7 +11,9 @@ use bevy_app::{App, Plugin, PostUpdate, PreUpdate};
 use bevy_ecs::prelude::*;
 use bevy_input::keyboard::{Key, KeyboardInput};
 use bevy_input::{ButtonInput, InputSystems};
-use bevy_input_focus::{FocusGained, FocusLost, FocusedInput, InputFocus, InputFocusSystems};
+use bevy_input_focus::{
+    FocusCause, FocusGained, FocusLost, FocusedInput, InputFocus, InputFocusSystems,
+};
 use bevy_math::Vec2;
 use bevy_picking::events::{Drag, Pointer, Press, Release};
 use bevy_picking::pointer::PointerButton;
@@ -196,7 +198,7 @@ fn on_pointer_press(
             TextEdit::MoveToPoint
         }(local_pos));
 
-    input_focus.set(press.entity, false);
+    input_focus.set(press.entity, FocusCause::Clicked);
 
     press.propagate(false);
 }
@@ -427,7 +429,7 @@ fn on_focus_gained(focus_gained: On<FocusGained>, q_text_input: Query<&mut Edita
     let target = focus_gained.event_target();
     if let Ok(_text_input) = q_text_input.get(target) {
         let event = focus_gained.event();
-        if event.tabbed_in {
+        if event.cause == FocusCause::Tabbed {
             println!("TABBED IN");
         }
     }
