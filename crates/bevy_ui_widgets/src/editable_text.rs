@@ -407,30 +407,20 @@ struct QueuedSelectAll(Option<(Entity, PointerButton)>);
 
 fn on_focus_select_all(
     focus_gained: On<FocusGained>,
-    mut pointer_presses: MessageReader<Pointer<Press>>,
-    mut q_text_input: Query<&mut EditableText, With<SelectAllOnFocus>>,
+    mut q_text_input: Query<(&mut EditableText, Has<SelectAllOnFocus>)>,
     mut queued_select_all: ResMut<QueuedSelectAll>,
 ) {
     let target = focus_gained.event_target();
-    if let Ok(mut editable_text) = q_text_input.get_mut(target) {
-        // Ideally, FocusGained would contain information on how it was gained instead.
-        let focus_gained_by_pointer_press =
-            pointer_presses.read().find(|press| press.entity == target);
-        if let Some(press) = focus_gained_by_pointer_press {
-            queued_select_all.0 = Some((target, press.button));
-        } else {
-            editable_text.queue_edit(TextEdit::SelectAll);
-        }
-    }
-}
+    if let Ok((mut editable_text, select_all_on_focus)) = q_text_input.get_mut(target) {
+        match focus_gained.event().cause {
+            FocusCause::Pressed => {
+                if select_all_on_focus {
+                    queued_select_all.0 = Some((target, PointerButton::Primary))
+                }
+            }
 
-// TODO: Select all and clean up
-fn on_focus_gained(focus_gained: On<FocusGained>, q_text_input: Query<&mut EditableText>) {
-    let target = focus_gained.event_target();
-    if let Ok(_text_input) = q_text_input.get(target) {
-        let event = focus_gained.event();
-        if event.cause == FocusCause::Navigated {
-            println!("TABBED IN");
+            // Navigating into a text input should always select all even without the SelectAllOnFocus marker
+            FocusCause::Navigated => editable_text.queue_edit(TextEdit::SelectAll),
         }
     }
 }
@@ -493,7 +483,6 @@ impl Plugin for EditableTextInputPlugin {
             .add_observer(on_pointer_press)
             .add_observer(on_focus_lost_clear_ime)
             .add_observer(on_focus_select_all)
-            .add_observer(on_focus_gained)
             .add_systems(
                 PreUpdate,
                 (
