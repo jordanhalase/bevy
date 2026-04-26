@@ -80,7 +80,7 @@ use bevy_reflect::{prelude::*, Reflect};
 ///
 /// ```rust
 /// use bevy_ecs::prelude::*;
-/// use bevy_input_focus::InputFocus;
+/// use bevy_input_focus::{FocusCause, InputFocus};
 ///
 /// fn set_focus_from_world(world: &mut World) {
 ///     let entity = world.spawn_empty().id();
