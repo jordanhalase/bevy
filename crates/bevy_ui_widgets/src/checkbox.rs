@@ -96,7 +96,7 @@ fn checkbox_on_pointer_down(
         // Clicking on a button makes it the focused input,
         // and hides the focus ring if it was visible.
         if let Some(mut focus) = focus {
-            focus.set(press.entity, FocusCause::Clicked);
+            focus.set(press.entity, FocusCause::Pressed);
         }
         if let Some(mut focus_visible) = focus_visible {
             focus_visible.0 = false;

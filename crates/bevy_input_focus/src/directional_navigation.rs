@@ -423,7 +423,7 @@ impl<'w> DirectionalNavigation<'w> {
                     direction,
                 }),
                 NavNeighbor::Set(new_focus) => {
-                    self.focus.set(new_focus, FocusCause::Tabbed);
+                    self.focus.set(new_focus, FocusCause::Navigated);
                     Ok(new_focus)
                 }
             }

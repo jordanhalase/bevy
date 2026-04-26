@@ -198,7 +198,7 @@ fn on_pointer_press(
             TextEdit::MoveToPoint
         }(local_pos));
 
-    input_focus.set(press.entity, FocusCause::Clicked);
+    input_focus.set(press.entity, FocusCause::Pressed);
 
     press.propagate(false);
 }
@@ -429,7 +429,7 @@ fn on_focus_gained(focus_gained: On<FocusGained>, q_text_input: Query<&mut Edita
     let target = focus_gained.event_target();
     if let Ok(_text_input) = q_text_input.get(target) {
         let event = focus_gained.event();
-        if event.cause == FocusCause::Tabbed {
+        if event.cause == FocusCause::Navigated {
             println!("TABBED IN");
         }
     }

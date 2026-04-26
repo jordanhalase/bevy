@@ -168,7 +168,7 @@ impl<'w, 's> AutoDirectionalNavigator<'w, 's> {
                 Ok(new_focus) => {
                     self.manual_directional_navigation
                         .focus
-                        .set(new_focus, FocusCause::Tabbed);
+                        .set(new_focus, FocusCause::Navigated);
                     Ok(new_focus)
                 }
                 Err(DirectionalNavigationError::NoNeighborInDirection { .. }) => {
@@ -183,7 +183,7 @@ impl<'w, 's> AutoDirectionalNavigator<'w, 's> {
                     {
                         self.manual_directional_navigation
                             .focus
-                            .set(new_focus, FocusCause::Tabbed);
+                            .set(new_focus, FocusCause::Navigated);
                         Ok(new_focus)
                     } else {
                         Err(DirectionalNavigationError::NoNeighborInDirection {

@@ -8,12 +8,12 @@ use bevy_reflect::Reflect;
 /// The cause for a [`FocusGained`]
 #[derive(Default, Reflect, PartialEq, Eq, Debug, Clone, Copy)]
 pub enum FocusCause {
-    /// The input was clicked into or otherwise default behavior
+    /// The input was pressed into with the mouse or touchpad
     #[default]
-    Clicked,
+    Pressed,
 
-    /// The input was tabbed into or otherwise focused with the keyboard
-    Tabbed,
+    /// The input was navigated into by the keyboard or gamepad
+    Navigated,
 }
 
 /// An [`EntityEvent`] that is sent when an entity gains [`InputFocus`].
