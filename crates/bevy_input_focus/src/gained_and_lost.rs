@@ -6,13 +6,19 @@ use bevy_ecs::prelude::*;
 use bevy_reflect::Reflect;
 
 /// The cause for a [`FocusGained`]
+///
+/// Sometimes widgets would like to know how their focus was gained so they can act accordingly.
+///
+/// For example, a text input may want to select all text when navigated into, but not when pressed.
 #[derive(Reflect, PartialEq, Eq, Debug, Clone, Copy)]
 pub enum FocusCause {
-    /// The input was pressed into with the mouse or touchpad
-    Pressed,
-
-    /// The input was navigated into by the keyboard or gamepad
+    /// The input was navigated into by the keyboard, gamepad, or default behavior when unknown.
     Navigated,
+
+    /// The input was pressed into with the mouse or touchpad
+    ///
+    /// This is only sent for primary mouse presses. Focus gained from other mouse buttons or gestures will be `Navigated`.
+    Pressed,
 }
 
 /// An [`EntityEvent`] that is sent when an entity gains [`InputFocus`].
