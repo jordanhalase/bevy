@@ -415,7 +415,7 @@ fn on_focus_select_all(
         match focus_gained.event().cause {
             FocusCause::Pressed => {
                 if select_all_on_focus {
-                    queued_select_all.0 = Some((target, PointerButton::Primary))
+                    queued_select_all.0 = Some((target, PointerButton::Primary));
                 }
             }
 
