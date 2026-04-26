@@ -69,7 +69,7 @@ use bevy_reflect::{prelude::*, Reflect};
 ///
 /// ```rust
 /// use bevy_ecs::prelude::*;
-/// use bevy_input_focus::InputFocus;
+/// use bevy_input_focus::{FocusCause, InputFocus};
 ///
 /// fn clear_focus(mut input_focus: ResMut<InputFocus>) {
 ///   input_focus.clear();
@@ -88,7 +88,7 @@ use bevy_reflect::{prelude::*, Reflect};
 ///     // Fetch the resource from the world
 ///     let mut input_focus = world.resource_mut::<InputFocus>();
 ///     // Then mutate it!
-///     input_focus.set(entity);
+///     input_focus.set(entity, FocusCause::Navigated);
 ///
 ///     // Or you can just insert a fresh copy of the resource
 ///     // which will overwrite the existing one.
