@@ -151,7 +151,7 @@ fn on_menu_event(
             for child in children.iter() {
                 if q_buttons.contains(*child) {
                     ev.propagate(false);
-                    focus.set(*child, FocusCause::Pressed);
+                    focus.set(*child, FocusCause::Navigated);
                     break;
                 }
             }

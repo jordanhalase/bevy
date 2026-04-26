@@ -126,7 +126,7 @@ impl InputFocus {
     pub fn from_entity(entity: Entity) -> Self {
         Self {
             current_focus: Some(entity),
-            recorded_changes: vec![Some((entity, FocusCause::Pressed))],
+            recorded_changes: vec![Some((entity, FocusCause::Navigated))],
             original_focus: None,
         }
     }
@@ -319,7 +319,7 @@ pub fn set_initial_focus(
     window: Single<Entity, With<PrimaryWindow>>,
 ) {
     if input_focus.get().is_none() {
-        input_focus.set(*window, FocusCause::Pressed);
+        input_focus.set(*window, FocusCause::Navigated);
     }
 }
 

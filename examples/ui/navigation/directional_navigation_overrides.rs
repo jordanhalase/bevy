@@ -377,7 +377,7 @@ fn setup_paged_ui(
     );
 
     // Set initial focus
-    input_focus.set(pages_entities[0][0], FocusCause::Pressed);
+    input_focus.set(pages_entities[0][0], FocusCause::Navigated);
 }
 
 /// Creates the buttons and text for a grid page and places the ids into their

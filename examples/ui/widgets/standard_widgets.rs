@@ -811,7 +811,7 @@ fn on_menu_event(
             }
         }
         MenuAction::FocusRoot => {
-            focus.set(anchor, FocusCause::Pressed);
+            focus.set(anchor, FocusCause::Navigated);
         }
     }
 }

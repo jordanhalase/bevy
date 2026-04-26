@@ -148,7 +148,7 @@ mod tests {
         let entity = app.world_mut().spawn_empty().id();
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, FocusCause::Pressed);
+            .set(entity, FocusCause::Navigated);
         app.update();
 
         assert_eq!(take_log(&mut app), vec![FocusEvent::Gained(entity)]);
@@ -162,7 +162,7 @@ mod tests {
         // Establish initial focus.
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, FocusCause::Pressed);
+            .set(entity, FocusCause::Navigated);
         app.update();
         take_log(&mut app);
 
@@ -180,13 +180,13 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(a, FocusCause::Pressed);
+            .set(a, FocusCause::Navigated);
         app.update();
         take_log(&mut app);
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(b, FocusCause::Pressed);
+            .set(b, FocusCause::Navigated);
         app.update();
 
         assert_eq!(
@@ -205,10 +205,10 @@ mod tests {
         let c = app.world_mut().spawn_empty().id();
 
         let mut focus = app.world_mut().resource_mut::<InputFocus>();
-        focus.set(a, FocusCause::Pressed);
-        focus.set(b, FocusCause::Pressed);
+        focus.set(a, FocusCause::Navigated);
+        focus.set(b, FocusCause::Navigated);
         focus.clear();
-        focus.set(c, FocusCause::Pressed);
+        focus.set(c, FocusCause::Navigated);
 
         app.update();
 
@@ -243,7 +243,7 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, FocusCause::Pressed);
+            .set(entity, FocusCause::Navigated);
         app.update();
         take_log(&mut app);
 
@@ -266,7 +266,7 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(child, FocusCause::Pressed);
+            .set(child, FocusCause::Navigated);
         app.update();
 
         // The event fires on the child, then bubbles to the parent.
@@ -301,7 +301,7 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, FocusCause::Pressed);
+            .set(entity, FocusCause::Navigated);
         app.update();
         take_log(&mut app);
 

@@ -152,7 +152,7 @@ fn menu_acquire_focus(
             match tab_navigation.initialize(menu, nav) {
                 Ok(next) => {
                     *menu_focus = MenuFocusState::Open;
-                    focus.set(next, FocusCause::Pressed);
+                    focus.set(next, FocusCause::Navigated);
                 }
                 Err(e) => {
                     warn!(

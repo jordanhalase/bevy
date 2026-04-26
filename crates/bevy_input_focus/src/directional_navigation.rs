@@ -755,7 +755,7 @@ mod tests {
         world.insert_resource(map);
 
         let mut focus = InputFocus::default();
-        focus.set(a, FocusCause::Pressed);
+        focus.set(a, FocusCause::Navigated);
         world.insert_resource(focus);
 
         let config = AutoNavigationConfig::default();
