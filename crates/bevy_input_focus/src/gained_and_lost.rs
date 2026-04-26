@@ -6,10 +6,9 @@ use bevy_ecs::prelude::*;
 use bevy_reflect::Reflect;
 
 /// The cause for a [`FocusGained`]
-#[derive(Default, Reflect, PartialEq, Eq, Debug, Clone, Copy)]
+#[derive(Reflect, PartialEq, Eq, Debug, Clone, Copy)]
 pub enum FocusCause {
     /// The input was pressed into with the mouse or touchpad
-    #[default]
     Pressed,
 
     /// The input was navigated into by the keyboard or gamepad
@@ -143,7 +142,7 @@ mod tests {
         let entity = app.world_mut().spawn_empty().id();
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, FocusCause::default());
+            .set(entity, FocusCause::Pressed);
         app.update();
 
         assert_eq!(take_log(&mut app), vec![FocusEvent::Gained(entity)]);
@@ -157,7 +156,7 @@ mod tests {
         // Establish initial focus.
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, FocusCause::default());
+            .set(entity, FocusCause::Pressed);
         app.update();
         take_log(&mut app);
 
@@ -175,13 +174,13 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(a, FocusCause::default());
+            .set(a, FocusCause::Pressed);
         app.update();
         take_log(&mut app);
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(b, FocusCause::default());
+            .set(b, FocusCause::Pressed);
         app.update();
 
         assert_eq!(
@@ -200,10 +199,10 @@ mod tests {
         let c = app.world_mut().spawn_empty().id();
 
         let mut focus = app.world_mut().resource_mut::<InputFocus>();
-        focus.set(a, FocusCause::default());
-        focus.set(b, FocusCause::default());
+        focus.set(a, FocusCause::Pressed);
+        focus.set(b, FocusCause::Pressed);
         focus.clear();
-        focus.set(c, FocusCause::default());
+        focus.set(c, FocusCause::Pressed);
 
         app.update();
 
@@ -238,7 +237,7 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, FocusCause::default());
+            .set(entity, FocusCause::Pressed);
         app.update();
         take_log(&mut app);
 
@@ -261,7 +260,7 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(child, FocusCause::default());
+            .set(child, FocusCause::Pressed);
         app.update();
 
         // The event fires on the child, then bubbles to the parent.
@@ -296,7 +295,7 @@ mod tests {
 
         app.world_mut()
             .resource_mut::<InputFocus>()
-            .set(entity, FocusCause::default());
+            .set(entity, FocusCause::Pressed);
         app.update();
         take_log(&mut app);
 

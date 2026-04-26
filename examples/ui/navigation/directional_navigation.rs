@@ -256,7 +256,7 @@ fn setup_scattered_ui(mut commands: Commands, mut input_focus: ResMut<InputFocus
 
     // Set initial focus
     if let Some(button) = first_button {
-        input_focus.set(button, FocusCause::default());
+        input_focus.set(button, FocusCause::Pressed);
     }
 }
 
