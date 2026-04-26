@@ -403,7 +403,7 @@ pub struct SelectAllOnFocus;
 /// Resource to track when a pointer press caused focus on an [`EditableText`].
 /// A corresponding pointer release will select all text if there is no other selection.
 #[derive(Resource, Default)]
-struct QueuedSelectAll(Option<(Entity, PointerButton)>);
+struct QueuedSelectAll(Option<Entity>);
 
 fn on_focus_select_all(
     focus_gained: On<FocusGained>,
@@ -415,7 +415,7 @@ fn on_focus_select_all(
         match focus_gained.event().cause {
             FocusCause::Pressed => {
                 if select_all_on_focus {
-                    queued_select_all.0 = Some((target, PointerButton::Primary));
+                    queued_select_all.0 = Some(target);
                 }
             }
 
@@ -439,11 +439,11 @@ fn apply_queued_select_all(
     mut queued_select_all: ResMut<QueuedSelectAll>,
     mut q_text_input: Query<&mut EditableText, With<SelectAllOnFocus>>,
 ) {
-    let Some((target, button)) = queued_select_all.0 else {
+    let Some(target) = queued_select_all.0 else {
         return;
     };
     for pointer_release in pointer_releases.read() {
-        if pointer_release.button == button
+        if pointer_release.button == PointerButton::Primary
             && let Ok(mut editable_text) = q_text_input.get_mut(target)
         {
             editable_text.queue_edit(TextEdit::SelectAllIfCollapsed);
