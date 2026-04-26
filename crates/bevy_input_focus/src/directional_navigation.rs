@@ -502,7 +502,7 @@ pub trait Navigable {
 /// # Example
 ///
 /// ```rust
-/// # use bevy_input_focus::directional_navigation::*;
+/// # use bevy_input_focus::{directional_navigation::*, FocusCause};
 /// # use bevy_ecs::entity::Entity;
 /// # use bevy_math::Vec2;
 /// let mut nav_map = DirectionalNavigationMap::default();
